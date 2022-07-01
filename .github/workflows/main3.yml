@@ -1,0 +1,22 @@
+name: CII
+
+on:
+  push:
+    branches: [deploy]
+    
+  workflow_dispatch:
+
+env:
+  DAY_OF_WEEK: Monday
+
+jobs:
+  greeting_job:
+    runs-on: ubuntu-latest
+    env:
+      Greeting: Hello
+    steps:
+    - name: Hello world action
+      with: # Set the secret as an input
+        super_secret: ${{ secrets.TOKEN }}
+      env: # Or as an environment variable
+        super_secret: ${{ secrets.TOKEN }}

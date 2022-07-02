@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const token = "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";
+const token = import.meta.env.VITE_TOKEN;
 const URL_GET_USERS = "https://api.github.com/search/users";
 const URL_GET_USER_DETAILS = "https://api.github.com/user";
 

@@ -4,27 +4,33 @@ import "./style.scss";
 import { API } from "../../services/API";
 import { IUser } from "../../interfaces";
 
-export const User = ({ id, avatar_url, login }: IUser) => {
-  const [repositoriesCount, setRepositoriesCount] = useState<string | null>(
-    null
-  );
+interface IUserDetails extends IUser {
+  setLoading?: (loading: boolean) => void;
+}
 
-  useEffect(() => {
-    let isMounted = true;
+export const User = ({
+  id,
+  avatar_url,
+  login,
+  setLoading,
+  repoCount,
+}: IUserDetails) => {
+  /*  useEffect(() => {
+    async function asyncFunc() {
+      // setLoading?.(true);
 
-    const fetchRepositoriesCount = async () => {
-      const publicRepos = await API.getUserDetails(id);
-      if (isMounted) {
+      const fetchRepositoriesCount = async () => {
+        const publicRepos = await API.getUserDetails(id);
+
         setRepositoriesCount(publicRepos);
-      }
-    };
+      };
 
-    fetchRepositoriesCount();
+      await fetchRepositoriesCount();
+      // setLoading?.(false);
+    }
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    asyncFunc();
+  }, []);*/
 
   return (
     <Card key={id} className="card-wrapper">
@@ -32,7 +38,7 @@ export const User = ({ id, avatar_url, login }: IUser) => {
         <Avatar size={80} src={avatar_url} />
         <div className="username">{login}</div>
       </div>
-      <div className="repository-count">Repo: {repositoriesCount}</div>
+      <div className="repository-count">Repo: {repoCount}</div>
     </Card>
   );
 };

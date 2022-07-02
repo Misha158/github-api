@@ -3,23 +3,33 @@ import {
   Axios,
   getSearchConfig,
   URL_GET_USER_DETAILS,
+  URL_GET_USERS_BY_SEARCH,
   URL_GET_USERS,
 } from "./config";
 import { IUser } from "../interfaces";
 
-interface IUsersResponse {
+interface IUsersBySearchResponse {
   items: IUser[];
 }
 
 interface IUsersDetailsResponse {
-  public_repos: string;
+  public_repos: number;
 }
 
 export const API = {
-  getUsers: async (userSearch: string) => {
+  getUsers: async () => {
     try {
-      const { data } = await Axios.get<IUsersResponse>(
-        URL_GET_USERS,
+      const { data } = await Axios.get<IUser[]>(URL_GET_USERS);
+      return data;
+    } catch (error) {
+      message.error(error?.message);
+      return null;
+    }
+  },
+  getUsersBySearch: async (userSearch: string) => {
+    try {
+      const { data } = await Axios.get<IUsersBySearchResponse>(
+        URL_GET_USERS_BY_SEARCH,
         getSearchConfig(userSearch)
       );
 

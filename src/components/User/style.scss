@@ -6,6 +6,13 @@
   width: 100%;
   display: flex;
   align-items: center;
+
+  &:hover {
+    transform: translate(0px, -2px);
+    transition: all 0.3s ease-in-out;
+    background-color: aliceblue;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
 }
 
 .avatar-wrapper {

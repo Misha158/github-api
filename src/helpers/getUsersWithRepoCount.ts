@@ -1,10 +1,11 @@
 import { API } from "../services/API";
 import { IUser } from "../interfaces";
+import { Dispatch, SetStateAction } from "react";
 
 interface IProps {
   usersData: IUser[] | null;
   setUsers: (users: IUser[]) => void;
-  setLoading: (loading: boolean) => void;
+  setLoading: Dispatch<SetStateAction<number>>;
 }
 
 export async function getUsersWithRepoCount({
@@ -27,7 +28,6 @@ export async function getUsersWithRepoCount({
     login: user.login,
     repoCount: promData[index],
   }));
-
   await setUsers(usersWithRepoCount || []);
-  setLoading(false);
+  await setLoading((prev) => prev - 1);
 }

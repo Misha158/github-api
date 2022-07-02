@@ -26,7 +26,7 @@ export const API = {
       return null;
     }
   },
-  getUsersBySearch: async (userSearch: string) => {
+  getUsersBySearch: async (userSearch: string | (string | null)[]) => {
     try {
       const { data } = await Axios.get<IUsersBySearchResponse>(
         URL_GET_USERS_BY_SEARCH,

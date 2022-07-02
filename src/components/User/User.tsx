@@ -1,39 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Avatar, Card } from "antd";
 import "./style.scss";
-import { API } from "../../services/API";
 import { IUser } from "../../interfaces";
+import { useNavigate } from "react-router-dom";
 
-interface IUserDetails extends IUser {
-  setLoading?: (loading: boolean) => void;
-}
+export const User = ({ id, avatar_url, login, repoCount }: IUser) => {
+  const navigate = useNavigate();
 
-export const User = ({
-  id,
-  avatar_url,
-  login,
-  setLoading,
-  repoCount,
-}: IUserDetails) => {
-  /*  useEffect(() => {
-    async function asyncFunc() {
-      // setLoading?.(true);
-
-      const fetchRepositoriesCount = async () => {
-        const publicRepos = await API.getUserDetails(id);
-
-        setRepositoriesCount(publicRepos);
-      };
-
-      await fetchRepositoriesCount();
-      // setLoading?.(false);
-    }
-
-    asyncFunc();
-  }, []);*/
+  const redirectToUserDetails = () => {
+    navigate(`/user/${id}`);
+  };
 
   return (
-    <Card key={id} className="card-wrapper">
+    <Card key={id} className="card-wrapper" onClick={redirectToUserDetails}>
       <div className="avatar-wrapper">
         <Avatar size={80} src={avatar_url} />
         <div className="username">{login}</div>

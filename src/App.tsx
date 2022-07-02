@@ -1,5 +1,8 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Input, Spin } from "antd";
+import queryString from "query-string";
+
 import "./style.scss";
 import { User } from "./components";
 import { API } from "./services/API";
@@ -7,49 +10,63 @@ import { IUser } from "./interfaces";
 import { getUsersWithRepoCount } from "./helpers/getUsersWithRepoCount";
 
 function App() {
-  const [userSearch, setUserSearch] = useState("");
   const [users, setUsers] = useState<IUser[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(0);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryUrl = queryString.parse(location.search).q;
 
   const didMount = useRef(false);
 
   async function getUsers() {
     const usersData = await API.getUsers();
+
     getUsersWithRepoCount({ usersData, setUsers, setLoading });
   }
 
-  async function getUsersBySearch() {
-    const usersData = await API.getUsersBySearch(userSearch);
+  async function getUsersBySearch(queryUrl: (string | null)[] | string) {
+    const usersData = await API.getUsersBySearch(queryUrl);
 
     getUsersWithRepoCount({ usersData, setUsers, setLoading });
   }
 
   useEffect(() => {
-    setLoading(true);
+    async function fetchUsers() {
+      setLoading((prev) => prev + 1);
 
-    async function asyncFunc() {
       if (!didMount.current) {
-        didMount.current = true;
-        await getUsers();
+        queryUrl ? await getUsersBySearch(queryUrl) : await getUsers();
 
+        didMount.current = true;
         return;
       }
 
-      await getUsersBySearch();
+      if (!queryUrl) {
+        setUsers([]);
+        setLoading((prev) => prev - 1);
+        navigate("/");
+        return;
+      }
+
+      getUsersBySearch(queryUrl);
     }
 
-    asyncFunc();
-  }, [userSearch]);
+    fetchUsers();
+  }, [queryUrl]);
 
   const onSearchUsers = (event: ChangeEvent<HTMLInputElement>) => {
-    setLoading(true);
-    setUserSearch(event.target.value);
+    navigate(`?q=${event.target.value}`);
   };
 
   return (
-    <div className="container">
+    <>
       <h1>Github searcher</h1>
-      <Input value={userSearch} onChange={onSearchUsers} />
+      <Input
+        value={(queryUrl as string) || ""}
+        onChange={onSearchUsers}
+        autoFocus={true}
+      />
       {loading ? (
         <Spin size="large" />
       ) : (
@@ -63,7 +80,7 @@ function App() {
           />
         ))
       )}
-    </div>
+    </>
   );
 }
 

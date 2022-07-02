@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const token = import.meta.env.VITE_TOKEN_NEW;
+const token = import.meta.env.VITE_TOKEN;
 export const URL_GET_USERS = "/users";
 export const URL_GET_USERS_BY_SEARCH = "/search/users";
 export const URL_GET_USER_DETAILS = "/user";
@@ -14,7 +14,7 @@ export const Axios = axios.create({
   },
 });
 
-export const getSearchConfig = (userSearch: string) => ({
+export const getSearchConfig = (userSearch: string | (string | null)[]) => ({
   params: {
     q: userSearch || null,
   },

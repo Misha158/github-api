@@ -14,10 +14,12 @@ interface IUsersBySearchResponse {
 
 export interface IUsersDetailsResponse {
   avatar_url: string;
+
   created_at: string;
   location: string;
   email: string;
   login: string;
+  bio: string | null;
   followers: number;
   following: number;
 }
@@ -50,6 +52,18 @@ export const API = {
     try {
       const { data } = await Axios.get<IUsersDetailsResponse>(
         `${URL_GET_USER_DETAILS}/${id}`
+      );
+
+      return data;
+    } catch (error) {
+      message.error(error?.message);
+      return null;
+    }
+  },
+  getRepositoriesByUserName: async (userName: string) => {
+    try {
+      const { data } = await Axios.get<IUsersDetailsResponse>(
+        `users/${userName}/repos`
       );
 
       return data;

@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Input, Spin } from "antd";
 import queryString from "query-string";
 
-import "./style.scss";
 import { User } from "./components";
 import { API } from "./services/API";
 import { IUser } from "./interfaces";
@@ -64,6 +63,7 @@ function App() {
       <Input
         value={(queryUrl as string) || ""}
         onChange={onSearchUsers}
+        placeholder="Search for Users"
         autoFocus={true}
       />
       {loading ? (

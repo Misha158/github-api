@@ -12,11 +12,9 @@ function App() {
   const didMount = useRef(false);
 
   async function getUsers() {
-    const {
-      data: { items },
-    } = await API.getUsers(userSearch);
+    const usersData = await API.getUsers(userSearch);
 
-    setUsers(items || []);
+    setUsers(usersData || []);
   }
 
   useEffect(() => {

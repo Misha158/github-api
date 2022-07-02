@@ -5,15 +5,17 @@ import { API } from "../../services/API";
 import { IUser } from "../../interfaces";
 
 export const User = ({ id, avatar_url, login }: IUser) => {
-  const [repositoriesCount, setRepositoriesCount] = useState(null);
+  const [repositoriesCount, setRepositoriesCount] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     let isMounted = true;
 
     const fetchRepositoriesCount = async () => {
-      const { data } = await API.getUserDetails(id);
+      const publicRepos = await API.getUserDetails(id);
       if (isMounted) {
-        setRepositoriesCount(data.public_repos);
+        setRepositoriesCount(publicRepos);
       }
     };
 

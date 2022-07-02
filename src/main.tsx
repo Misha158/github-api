@@ -8,6 +8,8 @@ import { UserDetails } from "./components";
 ReactDOM.render(
   <React.StrictMode>
     <div className="container">
+      <h1>Github searcher</h1>
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<App />} />

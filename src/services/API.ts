@@ -12,8 +12,14 @@ interface IUsersBySearchResponse {
   items: IUser[];
 }
 
-interface IUsersDetailsResponse {
-  public_repos: number;
+export interface IUsersDetailsResponse {
+  avatar_url: string;
+  created_at: string;
+  location: string;
+  email: string;
+  login: string;
+  followers: number;
+  following: number;
 }
 
 export const API = {
@@ -46,7 +52,7 @@ export const API = {
         `${URL_GET_USER_DETAILS}/${id}`
       );
 
-      return data.public_repos;
+      return data;
     } catch (error) {
       message.error(error?.message);
       return null;

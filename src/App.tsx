@@ -61,7 +61,6 @@ function App() {
 
   return (
     <>
-      <h1>Github searcher</h1>
       <Input
         value={(queryUrl as string) || ""}
         onChange={onSearchUsers}

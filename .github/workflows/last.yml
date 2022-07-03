@@ -16,3 +16,4 @@ jobs:
         - name: test
           env:
             TOKEN: ${{ secrets.TOKEN }}
+          run: echo $TOKEN

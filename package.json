@@ -1,5 +1,6 @@
 {
   "name": "github-users",
+  "homepage": "https://misha158.github.io/github-api",
   "private": true,
   "version": "0.0.0",
   "scripts": {

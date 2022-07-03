@@ -43,7 +43,6 @@ function App() {
 
       if (!queryUrl) {
         await getUsers();
-        // navigate("/");
         return;
       }
 

@@ -3,6 +3,7 @@ import { Avatar, Descriptions } from "antd";
 import { getUserDetailsData } from "../helpers";
 import { IUserDetailsData } from "../../../interfaces";
 import { IUsersDetailsResponse } from "../../../services/API";
+import "./style.scss";
 
 interface IProps {
   details: IUsersDetailsResponse;
@@ -11,8 +12,8 @@ interface IProps {
 export const UserProfile = ({ details }: IProps) => {
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <div style={{ marginRight: "20px" }}>
+      <div className="user-avatar-wrapper">
+        <div className="user-avatar">
           <Avatar size={150} src={details?.avatar_url} />
         </div>
         <Descriptions column={1}>
@@ -26,9 +27,7 @@ export const UserProfile = ({ details }: IProps) => {
           ))}
         </Descriptions>
       </div>
-      <div style={{ textAlign: "start", width: "100%", marginBottom: "20px" }}>
-        {details?.bio}
-      </div>
+      <div className="user-bio">{details?.bio}</div>
     </>
   );
 };

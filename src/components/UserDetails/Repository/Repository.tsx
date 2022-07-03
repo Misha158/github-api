@@ -1,6 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 import { IReposResponseNew } from "../../../services/API";
+import "./style.scss";
 
 interface IProps {
   repository: IReposResponseNew;
@@ -16,7 +17,7 @@ export const Repository = ({ repository }: IProps) => {
     >
       <Card>
         <div>{repository.name}</div>
-        <div style={{ marginLeft: "auto" }}>
+        <div className="repository-wrapper">
           <div>{repository.forks} Forks</div>
           <div>{repository.stars} Stars</div>
         </div>

@@ -87,7 +87,7 @@ export const UserDetails = () => {
       <Input
         placeholder="Search for User's repositories"
         onChange={onSearchRepositories}
-        style={{ marginBottom: "10px" }}
+        className="input-user-repositories"
         value={queryUrl as string}
         autoFocus={true}
       />

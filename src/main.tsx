@@ -11,7 +11,7 @@ ReactDOM.render(
     <div className="container">
       <h1>Github searcher</h1>
 
-      <HashRouter basename="/github-api">
+      <HashRouter>
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="user/:id" element={<UserDetails />} />

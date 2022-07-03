@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import "antd/dist/antd.css";
 import "./style.scss";
 import App from "./App";
@@ -11,13 +11,13 @@ ReactDOM.render(
     <div className="container">
       <h1>Github searcher</h1>
 
-      <BrowserRouter basename="/github-api">
+      <HashRouter basename="/github-api">
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="user/:id" element={<UserDetails />} />
           <Route path="*" element={<div>Not Found</div>} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   </React.StrictMode>,
   document.getElementById("root")

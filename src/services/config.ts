@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const token = import.meta.env.VITE_TOKEN;
+const token = import.meta.env.VITE_TOKEN_NEW;
 export const URL_GET_USERS = "/users";
 export const URL_GET_USERS_BY_SEARCH = "/search/users";
 export const URL_GET_USER_DETAILS = "/user";

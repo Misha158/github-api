@@ -42,9 +42,8 @@ function App() {
       }
 
       if (!queryUrl) {
-        setUsers([]);
-        setLoading((prev) => prev - 1);
-        navigate("/");
+        await getUsers();
+        // navigate("/");
         return;
       }
 
@@ -55,7 +54,7 @@ function App() {
   }, [queryUrl]);
 
   const onSearchUsers = (event: ChangeEvent<HTMLInputElement>) => {
-    navigate(`?q=${event.target.value}`);
+    navigate(event.target.value ? `?q=${event.target.value}` : "/");
   };
 
   return (
@@ -64,20 +63,24 @@ function App() {
         value={(queryUrl as string) || ""}
         onChange={onSearchUsers}
         placeholder="Search for Users"
+        className="user-input"
         autoFocus={true}
       />
       {loading ? (
         <Spin size="large" />
       ) : (
-        users.map((user: IUser) => (
-          <User
-            key={user.id}
-            id={user.id}
-            avatar_url={user.avatar_url}
-            login={user.login}
-            repoCount={user.repoCount}
-          />
-        ))
+        <>
+          {!users.length && <div>No users yet</div>}
+          {users.map((user: IUser) => (
+            <User
+              key={user.id}
+              id={user.id}
+              avatar_url={user.avatar_url}
+              login={user.login}
+              repoCount={user.repoCount}
+            />
+          ))}
+        </>
       )}
     </>
   );

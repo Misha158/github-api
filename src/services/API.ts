@@ -21,6 +21,7 @@ export interface IUsersDetailsResponse {
   bio: string | null;
   followers: number;
   following: number;
+  public_repos: number;
 }
 
 export interface IReposResponse {

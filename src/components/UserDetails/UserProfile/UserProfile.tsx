@@ -22,7 +22,7 @@ export const UserProfile = ({ details }: IProps) => {
               label={userDetails.label}
               key={userDetails.label}
             >
-              {userDetails.value}
+              {userDetails.value || "-"}
             </Descriptions.Item>
           ))}
         </Descriptions>

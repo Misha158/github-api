@@ -14,7 +14,6 @@ interface IUsersBySearchResponse {
 
 export interface IUsersDetailsResponse {
   avatar_url: string;
-
   created_at: string;
   location: string;
   email: string;
@@ -22,6 +21,22 @@ export interface IUsersDetailsResponse {
   bio: string | null;
   followers: number;
   following: number;
+}
+
+export interface IReposResponse {
+  name: string;
+  forks: string;
+  stargazers_count: string;
+  stars: string;
+  repo_url: string;
+  html_url: string;
+}
+
+export interface IReposResponseNew {
+  name: string;
+  forks: string;
+  stars: string;
+  repo_url: string;
 }
 
 export const API = {
@@ -62,11 +77,16 @@ export const API = {
   },
   getRepositoriesByUserName: async (userName: string) => {
     try {
-      const { data } = await Axios.get<IUsersDetailsResponse>(
+      const { data } = await Axios.get<IReposResponse[]>(
         `users/${userName}/repos`
       );
 
-      return data;
+      return data.map((repo: IReposResponse) => ({
+        name: repo.name,
+        forks: repo.forks,
+        stars: repo.stargazers_count,
+        repo_url: repo.html_url,
+      }));
     } catch (error) {
       message.error(error?.message);
       return null;

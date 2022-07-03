@@ -1,89 +1,106 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { API, IUsersDetailsResponse } from "../../services/API";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { Avatar, Card, Descriptions, Input } from "antd";
-import { getUserDetailsData } from "./helpers";
-import { IUserDetailsData } from "../../interfaces";
+import {
+  API,
+  IReposResponseNew,
+  IUsersDetailsResponse,
+} from "../../services/API";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Input, Spin } from "antd";
 import "./style.scss";
+import { UserProfile } from "./UserProfile/UserProfile";
+import { Repository } from "./Repository/Repository";
+import queryString from "query-string";
 
 export const UserDetails = () => {
   const { id } = useParams();
   const [details, setDetails] = useState<IUsersDetailsResponse | null>(null);
-  const [repositories, setRepositories] = useState<any | null>(null);
+  const [repositories, setRepositories] = useState<
+    IReposResponseNew[] | null | undefined
+  >(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const queryUrl = queryString.parse(location.search).repositories;
 
   const fetchDetails = async () => {
+    setLoading(true);
     const userDetails = await API.getUserDetails(id || "");
 
-    const userRepositories = await API.getRepositoriesByUserName(
-      userDetails?.login || ""
-    );
-
     await setDetails(userDetails);
-    setRepositories(userRepositories);
+    await fetchRepos(userDetails?.login, queryUrl);
+  };
+
+  const fetchRepos = async (
+    login?: string,
+    queryUrl?: string | null | (string | null)[]
+  ) => {
+    const userRepositories = await API.getRepositoriesByUserName(login || "");
+
+    if (queryUrl) {
+      const filteredRepos = userRepositories?.filter(
+        (repo: IReposResponseNew) => repo.name.includes(queryUrl as string)
+      );
+
+      setRepositories(filteredRepos);
+      setLoading(false);
+
+      return;
+    }
+
+    await setRepositories(userRepositories);
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchDetails();
   }, []);
 
-  console.log(repositories);
-
-  const onSearchRepositories = (event: ChangeEvent<HTMLInputElement>) => {
+  const onSearchRepositories = async (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.value) {
-      navigate(`/user/${id}`);
+      setLoading(true);
+      await navigate(`/user/${id}`);
+      await fetchRepos(details?.login, event.target.value);
+      setLoading(false);
       return;
     }
 
-    navigate(`/user/${id}?q=${event.target.value}`);
+    navigate(`/user/${id}?repositories=${event.target.value}`);
+
+    const userRepositories = await API.getRepositoriesByUserName(
+      details?.login || ""
+    );
+
+    const filteredRepos = userRepositories?.filter((repo: IReposResponseNew) =>
+      repo.name.includes(event.target.value)
+    );
+
+    setRepositories(filteredRepos);
   };
+
+  if (!details) {
+    return <Spin size="large" />;
+  }
 
   return (
     <>
-      <div style={{ display: "flex" }}>
-        <div style={{ marginRight: "20px" }}>
-          <Avatar size={150} src={details?.avatar_url} />
-        </div>
-        <Descriptions column={1}>
-          {getUserDetailsData(details).map((userDetails: IUserDetailsData) => (
-            <Descriptions.Item
-              label={userDetails.label}
-              key={userDetails.label}
-            >
-              {userDetails.value}
-            </Descriptions.Item>
-          ))}
-        </Descriptions>
-      </div>
-      <div style={{ textAlign: "start", width: "100%", marginBottom: "20px" }}>
-        {details?.bio}
-      </div>
+      <UserProfile details={details} />
       <Input
         placeholder="Search for User's repositories"
         onChange={onSearchRepositories}
         style={{ marginBottom: "10px" }}
+        value={queryUrl as string}
+        autoFocus={true}
       />
-      {repositories?.map((repository: any) => (
-        <Card key={repository.name}>
-          <a
-            href={repository.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "flex",
-              width: "100%",
-              color: "black",
-              alignItems: "center",
-            }}
-          >
-            <div>{repository.name}</div>
-            <div style={{ marginLeft: "auto" }}>
-              <div>{repository.forks} Forks</div>
-              <div>{repository.stargazers_count} Stars</div>
-            </div>
-          </a>
-        </Card>
-      ))}
+      {loading ? (
+        <Spin size="large" />
+      ) : (
+        <>
+          {!repositories?.length && <div>No repositories yet</div>}
+          {repositories?.map((repository: IReposResponseNew) => (
+            <Repository repository={repository} key={repository.name} />
+          ))}
+        </>
+      )}
     </>
   );
 };

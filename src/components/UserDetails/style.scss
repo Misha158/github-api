@@ -5,3 +5,17 @@
 .ant-card {
   width: 100%;
 }
+
+.link-to-repo {
+  display: flex;
+  width: 100%;
+  color: black;
+  align-items: center;
+
+  &:hover, .ant-card:hover {
+    transform: translate(0px, -2px);
+    transition: all 0.3s ease-in-out;
+    background-color: aliceblue;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+}

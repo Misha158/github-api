@@ -64,7 +64,7 @@ export const UserDetails = () => {
       return;
     }
 
-    navigate(`/user/${id}?repositories=${event.target.value}`);
+    navigate(`/user/${id}/?repositories=${event.target.value}`);
 
     const userRepositories = await API.getRepositoriesByUserName(
       details?.login || ""

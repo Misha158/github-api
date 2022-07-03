@@ -9,7 +9,6 @@ import { IUser } from "./interfaces";
 import { getUsersWithRepoCount } from "./helpers/getUsersWithRepoCount";
 
 function App() {
-  console.log(import.meta.env);
   const [users, setUsers] = useState<IUser[]>([]);
   const [loading, setLoading] = useState(0);
 
